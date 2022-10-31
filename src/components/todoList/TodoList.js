@@ -1,22 +1,24 @@
 import { Button, List, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import Todo from "../todo/Todo";
-
-const DUMMY_TODO = [
-  { id: 1, name: "Learn Redux", completed: false },
-  { id: 2, name: "Learn Java", completed: true },
-  { id: 3, name: "Learn JavScript", completed: false },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { addNewTodo } from "./TodoListSlice";
+import { TodoListSelector } from "../../redux/selectors";
 
 function TodoList() {
+  const [input, setInput] = useState("");
+  const dispatch = useDispatch();
+  const todoList = useSelector(TodoListSelector);
   const handleInputTodoChange = (event) => {
-    console.log(event.target.value);
+    setInput(event.target.value);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Submit...");
+    if (input.trim() === "") return;
+    dispatch(addNewTodo({ id: 4, name: input, completed: false }));
+    setInput("");
   };
   return (
     <Box minWidth={400}>
@@ -30,7 +32,7 @@ function TodoList() {
           height: "200px",
         }}
       >
-        {DUMMY_TODO.map((todo) => {
+        {todoList.map((todo) => {
           return (
             <Todo
               name={todo.name}
@@ -55,9 +57,10 @@ function TodoList() {
             placeholder="Add new todo"
             inputProps={{ "aria-label": "add new todo" }}
             onChange={handleInputTodoChange}
-            name="newTodo"
+            name="name"
             required
             autoFocus
+            value={input}
           />
           <Button
             variant="contained"

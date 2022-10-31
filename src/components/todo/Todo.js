@@ -15,6 +15,12 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import React, { Fragment, useState } from "react";
 import { Box } from "@mui/system";
+import { useDispatch } from "react-redux";
+import {
+  deleteTodo,
+  toggleTodoComplete,
+  updateNameTodo,
+} from "../todoList/TodoListSlice";
 
 const style = {
   position: "absolute",
@@ -29,14 +35,19 @@ const style = {
 };
 
 function Todo({ id, name, completed }) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(completed);
   const [modalUpdate, setModalUpdate] = useState(false);
+  const [updateTodo, setUpdateTodo] = useState(name);
+
+  const dispatch = useDispatch();
 
   const handleToggle = () => {
+    dispatch(toggleTodoComplete(id));
     setChecked((check) => !check);
   };
+  //   handler delete one todo
   const handleDeleteTodo = () => {
-    console.log("delete...");
+    dispatch(deleteTodo(id));
   };
   const handleUpdateTodo = () => {
     console.log("update");
@@ -47,15 +58,21 @@ function Todo({ id, name, completed }) {
   };
   const handleUpdateTodoChange = (event) => {
     console.log(event.target.value);
+    setUpdateTodo(event.target.value);
   };
   const handleUpdate = (event) => {
     event.preventDefault();
+    if (!window.confirm("Change name todo?")) {
+      setUpdateTodo(name);
+      return;
+    }
     console.log("handle update");
+    dispatch(updateNameTodo({ id, name: updateTodo }));
     setModalUpdate(false);
   };
   return (
     <Fragment>
-      <ListItem disablePadding>
+      <ListItem disablePadding sx={{ pr: "12px" }}>
         <ListItemButton
           role={undefined}
           onClick={handleToggle}
@@ -70,19 +87,19 @@ function Todo({ id, name, completed }) {
             />
           </ListItemIcon>
           <ListItemText primary={name} />
-          <IconButton
-            edge="end"
-            aria-label="update"
-            onClick={handleUpdateTodo}
-            sx={{ mr: 1 }}
-            modal={modalUpdate}
-          >
-            <ModeEditOutlinedIcon />
-          </IconButton>
-          <IconButton edge="end" aria-label="delete" onClick={handleDeleteTodo}>
-            <DeleteOutlineOutlinedIcon />
-          </IconButton>
         </ListItemButton>
+        <IconButton
+          edge="end"
+          aria-label="update"
+          onClick={handleUpdateTodo}
+          sx={{ mr: 1 }}
+          modal={modalUpdate}
+        >
+          <ModeEditOutlinedIcon />
+        </IconButton>
+        <IconButton edge="end" aria-label="delete" onClick={handleDeleteTodo}>
+          <DeleteOutlineOutlinedIcon />
+        </IconButton>
       </ListItem>
       {/* Update */}
       <Modal
@@ -110,6 +127,7 @@ function Todo({ id, name, completed }) {
               name="updateTodo"
               required
               autoFocus
+              value={updateTodo}
             />
             <Button
               variant="contained"
@@ -117,7 +135,7 @@ function Todo({ id, name, completed }) {
               type="submit"
               onClick={handleUpdate}
             >
-              Add
+              update
             </Button>
           </Box>
         </Box>
