@@ -5,12 +5,12 @@ import React, { useState } from "react";
 import Todo from "../todo/Todo";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTodo } from "./TodoListSlice";
-import { TodoListSelector } from "../../redux/selectors";
+import { RemainingTodo } from "../../redux/selectors";
 
 function TodoList() {
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
-  const todoList = useSelector(TodoListSelector);
+  const remainingTodo = useSelector(RemainingTodo);
   const handleInputTodoChange = (event) => {
     setInput(event.target.value);
   };
@@ -32,7 +32,7 @@ function TodoList() {
           height: "200px",
         }}
       >
-        {todoList.map((todo) => {
+        {remainingTodo.map((todo) => {
           return (
             <Todo
               name={todo.name}

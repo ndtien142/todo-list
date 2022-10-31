@@ -5,7 +5,7 @@ const initialState = {
   todos: [
     { id: 1, name: "Learn Redux", completed: false },
     { id: 2, name: "Learn Java", completed: true },
-    { id: 3, name: "Learn JavScript", completed: false },
+    { id: 3, name: "Learn JavaScript", completed: false },
   ],
 };
 

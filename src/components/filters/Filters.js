@@ -9,14 +9,21 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { searchFilterChange, statusFilterChange } from "./FiltersSlice";
 
 function Filters() {
+  const [searchFilter, setSearchFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  const dispatch = useDispatch();
   const handleSearchFilterChange = (event) => {
-    console.log(event.target.value);
+    setSearchFilter(event.target.value);
+    dispatch(searchFilterChange(event.target.value));
   };
   const handleStatusFilterChange = (event) => {
-    console.log(event.target.value);
+    setStatusFilter(event.target.value);
+    dispatch(statusFilterChange(event.target.value));
   };
   return (
     <Box minWidth={350} bgcolor="#fff">
@@ -28,6 +35,7 @@ function Filters() {
           onChange={handleSearchFilterChange}
           fullWidth
           startAdornment={<SearchOutlinedIcon sx={{ mr: 2 }} />}
+          value={searchFilter}
         />
       </Box>
       <Divider />
