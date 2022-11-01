@@ -1,15 +1,21 @@
 import { Button, List, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Todo from "../todo/Todo";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTodo } from "./TodoListSlice";
+import { fetchTodoListActions } from "../../redux/todo-thunk-creator";
 import { RemainingTodo } from "../../redux/selectors";
 
 function TodoList() {
-  const [input, setInput] = useState("");
+  // Fetching without useQuery
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchTodoListActions());
+  }, [dispatch]);
+
+  const [input, setInput] = useState("");
   const remainingTodo = useSelector(RemainingTodo);
   const handleInputTodoChange = (event) => {
     setInput(event.target.value);
@@ -17,7 +23,7 @@ function TodoList() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (input.trim() === "") return;
-    dispatch(addNewTodo({ id: 4, name: input, completed: false }));
+    dispatch(addNewTodo({ name: input, completed: false }));
     setInput("");
   };
   return (

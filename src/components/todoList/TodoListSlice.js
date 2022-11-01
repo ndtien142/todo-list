@@ -2,21 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   status: "idle",
-  todos: [
-    { id: 1, name: "Learn Redux", completed: false },
-    { id: 2, name: "Learn Java", completed: true },
-    { id: 3, name: "Learn JavaScript", completed: false },
-  ],
+  todos: [],
+  isChange: false,
 };
 
 const TodoListSlice = createSlice({
   name: "todoList",
   initialState,
   reducers: {
+    replaceTodos: (state, action) => {
+      state.todos = [...action.payload];
+    },
     addNewTodo: (state, action) => {
+      state.isChange = true;
       state.todos.push(action.payload);
     },
     deleteTodo: (state, action) => {
+      state.isChange = true;
       // delete todo using id ==> action.payload is a todo id
       const todoIndex = state.todos.findIndex((tdo) => {
         return tdo.id === action.payload;
@@ -24,6 +26,7 @@ const TodoListSlice = createSlice({
       state.todos.splice(todoIndex, 1);
     },
     toggleTodoComplete: (state, action) => {
+      state.isChange = true;
       // Define element by ID pass by action.payload
       state.todos.forEach((tdo) => {
         if (tdo.id === action.payload) {
@@ -32,6 +35,7 @@ const TodoListSlice = createSlice({
       });
     },
     updateNameTodo: (state, action) => {
+      state.isChange = true;
       state.todos.forEach((tdo) => {
         if (tdo.id === action.payload.id) {
           tdo.name = action.payload.name;
@@ -41,6 +45,11 @@ const TodoListSlice = createSlice({
   },
 });
 
-export const { addNewTodo, deleteTodo, toggleTodoComplete, updateNameTodo } =
-  TodoListSlice.actions;
+export const {
+  addNewTodo,
+  deleteTodo,
+  toggleTodoComplete,
+  updateNameTodo,
+  replaceTodos,
+} = TodoListSlice.actions;
 export default TodoListSlice.reducer;

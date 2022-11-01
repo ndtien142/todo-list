@@ -3,6 +3,7 @@ import { createSelector } from "@reduxjs/toolkit";
 export const TodoListSelector = (state) => state.todoList.todos;
 export const SearchFilterSelector = (state) => state.filters.search;
 export const StatusFilterSelector = (state) => state.filters.status;
+export const isChangeSelector = (state) => state.todoList.isChange;
 
 export const RemainingTodo = createSelector(
   TodoListSelector,

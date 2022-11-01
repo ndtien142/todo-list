@@ -13,14 +13,16 @@ import {
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import SendIcon from "@mui/icons-material/Send";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Box } from "@mui/system";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   deleteTodo,
   toggleTodoComplete,
   updateNameTodo,
 } from "../todoList/TodoListSlice";
+import { updateTodoListActions } from "../../redux/todo-thunk-creator";
+import { isChangeSelector } from "../../redux/selectors";
 
 const style = {
   position: "absolute",
@@ -34,12 +36,25 @@ const style = {
   p: 4,
 };
 
+let isInitial = false;
+
 function Todo({ id, name, completed }) {
   const [checked, setChecked] = useState(completed);
   const [modalUpdate, setModalUpdate] = useState(false);
   const [updateTodo, setUpdateTodo] = useState(name);
 
   const dispatch = useDispatch();
+  const isChanged = useSelector(isChangeSelector);
+  useEffect(() => {
+    if (isInitial) {
+      isInitial = false;
+      return;
+    }
+    // When user change data => update data to server.
+    if (!isChanged) return;
+    // Update state to server state
+    dispatch(updateTodoListActions({ id, name, completed }));
+  }, [dispatch, name, completed]);
 
   const handleToggle = () => {
     dispatch(toggleTodoComplete(id));
