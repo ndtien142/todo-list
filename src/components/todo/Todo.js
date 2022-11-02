@@ -38,7 +38,7 @@ const style = {
 
 let isInitial = false;
 
-function Todo({ id, name, completed }) {
+function Todo({ id, name, completed, allTodos }) {
   const [checked, setChecked] = useState(completed);
   const [modalUpdate, setModalUpdate] = useState(false);
   const [updateTodo, setUpdateTodo] = useState(name);
@@ -53,8 +53,9 @@ function Todo({ id, name, completed }) {
     // When user change data => update data to server.
     if (!isChanged) return;
     // Update state to server state
-    dispatch(updateTodoListActions({ id, name, completed }));
-  }, [dispatch, name, completed]);
+    console.log(allTodos);
+    dispatch(updateTodoListActions(allTodos));
+  }, [dispatch, name, completed, allTodos]);
 
   const handleToggle = () => {
     dispatch(toggleTodoComplete(id));

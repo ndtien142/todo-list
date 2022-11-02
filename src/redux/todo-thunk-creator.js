@@ -14,7 +14,7 @@ export const fetchTodoListActions = () => {
     }
   };
 };
-// Update todo
+// Update all todo
 export const updateTodoListActions = (data) => {
   return async (dispatch) => {
     try {
@@ -23,6 +23,7 @@ export const updateTodoListActions = (data) => {
       console.log(result);
       // show succeed
     } catch (error) {
+      // Tại sao dữ liệu ở database cập nhật đúng mà ở đây lại báo lỗi
       console.log("Error: Connect to db is failed!");
     }
   };

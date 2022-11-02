@@ -6,25 +6,37 @@ import Todo from "../todo/Todo";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewTodo } from "./TodoListSlice";
 import { fetchTodoListActions } from "../../redux/todo-thunk-creator";
-import { RemainingTodo } from "../../redux/selectors";
+import { RemainingTodo, TodoListSelector } from "../../redux/selectors";
+import { getLatestId, updateId } from "../../api/todosApi";
 
 function TodoList() {
+  const [latestId, setLatestId] = useState(0);
   // Fetching without useQuery
   const dispatch = useDispatch();
   useEffect(() => {
+    const result = getLatestId();
+    result.then((data) => {
+      setLatestId(data);
+    });
     dispatch(fetchTodoListActions());
   }, [dispatch]);
 
+  useEffect(() => {
+    updateId(latestId);
+  }, [latestId]);
+
   const [input, setInput] = useState("");
   const remainingTodo = useSelector(RemainingTodo);
+  const allTodos = useSelector(TodoListSelector);
   const handleInputTodoChange = (event) => {
     setInput(event.target.value);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
     if (input.trim() === "") return;
-    dispatch(addNewTodo({ name: input, completed: false }));
+    dispatch(addNewTodo({ name: input, completed: false, id: latestId }));
     setInput("");
+    setLatestId((id) => id + 1);
   };
   return (
     <Box minWidth={400}>
@@ -45,6 +57,7 @@ function TodoList() {
               completed={todo.completed}
               id={todo.id}
               key={todo.id}
+              allTodos={allTodos}
             ></Todo>
           );
         })}

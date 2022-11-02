@@ -1,21 +1,38 @@
-const baseUrl = `https://my-json-server.typicode.com/ndtien142/todoList/todo`;
-
+const baseUrl = `https://todolist-33a7c-default-rtdb.firebaseio.com/todo.json`;
+const idUrl = `https://todolist-33a7c-default-rtdb.firebaseio.com/id.json`;
 // Get data
 export const getTodosApi = async () => {
   const response = await fetch(baseUrl);
   const data = await response.json();
   return data;
 };
+// Get latest id
+export const getLatestId = async () => {
+  const response = await fetch(idUrl);
+  const data = await response.json();
+  return data;
+};
+// Update id
+export const updateId = async (id) => {
+  const response = await fetch(idUrl, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(id),
+  });
+  const data = await response.json();
+  return data;
+};
 // Update todo
-export const updateTodoApi = async (todo) => {
-  const response = await fetch(baseUrl + `/${todo.id}`, {
+export const updateTodoApi = async (todos) => {
+  const response = await fetch(baseUrl, {
     method: "PUT",
     headers: {
       "Content-type": "application/json",
     },
     body: JSON.stringify({
-      name: todo.name,
-      completed: todo.completed,
+      ...todos,
     }),
   });
   const data = await response.json();
