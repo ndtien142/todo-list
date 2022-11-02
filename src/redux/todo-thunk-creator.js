@@ -24,7 +24,7 @@ export const updateTodoListActions = (data) => {
       // show succeed
     } catch (error) {
       // Tại sao dữ liệu ở database cập nhật đúng mà ở đây lại báo lỗi
-      console.log("Error: Connect to db is failed!");
+      console.log("Error: Failed to connect database!");
     }
   };
 };

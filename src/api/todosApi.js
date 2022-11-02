@@ -1,6 +1,14 @@
 const baseUrl = `https://todolist-33a7c-default-rtdb.firebaseio.com/todo.json`;
 const idUrl = `https://todolist-33a7c-default-rtdb.firebaseio.com/id.json`;
-// Get data
+// Get todo api using useQuery
+export const getTodosApiUseQuery = async () => {
+  const response = await fetch(baseUrl);
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return response.json();
+};
+// Get data using thunk creator
 export const getTodosApi = async () => {
   const response = await fetch(baseUrl);
   const data = await response.json();

@@ -4,27 +4,24 @@ import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import Todo from "../todo/Todo";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewTodo } from "./TodoListSlice";
-import { fetchTodoListActions } from "../../redux/todo-thunk-creator";
+import { addNewTodo, replaceTodos } from "./TodoListSlice";
 import { RemainingTodo, TodoListSelector } from "../../redux/selectors";
-import { getLatestId, updateId } from "../../api/todosApi";
+import { getTodosApiUseQuery } from "../../api/todosApi";
+import { useQuery } from "@tanstack/react-query";
 
 function TodoList() {
-  const [latestId, setLatestId] = useState(0);
+  const { data, isSuccess } = useQuery(["todos"], getTodosApiUseQuery);
   // Fetching without useQuery
   const dispatch = useDispatch();
+  if (data && isSuccess) {
+    console.log(data);
+  }
   useEffect(() => {
-    const result = getLatestId();
-    result.then((data) => {
-      setLatestId(data);
-    });
-    dispatch(fetchTodoListActions());
-  }, [dispatch]);
-
-  useEffect(() => {
-    updateId(latestId);
-  }, [latestId]);
-
+    if (data && isSuccess) {
+      console.log(data);
+      dispatch(replaceTodos(data));
+    }
+  }, [data]);
   const [input, setInput] = useState("");
   const remainingTodo = useSelector(RemainingTodo);
   const allTodos = useSelector(TodoListSelector);
@@ -34,9 +31,9 @@ function TodoList() {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (input.trim() === "") return;
-    dispatch(addNewTodo({ name: input, completed: false, id: latestId }));
+    dispatch(addNewTodo({ name: input, completed: false, id: 6 }));
     setInput("");
-    setLatestId((id) => id + 1);
+    // setLatestId((id) => id + 1);
   };
   return (
     <Box minWidth={400}>
