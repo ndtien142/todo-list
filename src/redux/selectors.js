@@ -4,6 +4,8 @@ export const TodoListSelector = (state) => state.todoList.todos;
 export const SearchFilterSelector = (state) => state.filters.search;
 export const StatusFilterSelector = (state) => state.filters.status;
 export const isChangeSelector = (state) => state.todoList.isChange;
+export const nextIdSelector = (state) => state.todoList.nextId;
+export const StatusTodosSelector = (state) => state.todoList.status;
 
 export const RemainingTodo = createSelector(
   TodoListSelector,

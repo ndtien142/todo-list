@@ -4,18 +4,29 @@ const initialState = {
   status: "idle",
   todos: [],
   isChange: false,
+  nextId: null,
 };
 
 const TodoListSlice = createSlice({
   name: "todoList",
   initialState,
   reducers: {
+    updateStatusSuccess: (state, action) => {
+      state.status = "success";
+    },
+    replaceNextId: (state, action) => {
+      state.nextId = action.payload;
+    },
     replaceTodos: (state, action) => {
-      state.todos = [...action.payload];
+      const transArray = { ...action.payload };
+      for (let key in transArray) {
+        state.todos.push(transArray[key]);
+      }
     },
     addNewTodo: (state, action) => {
       state.isChange = true;
       state.todos.push(action.payload);
+      state.nextId = state.nextId + 1;
     },
     deleteTodo: (state, action) => {
       state.isChange = true;
@@ -51,5 +62,7 @@ export const {
   toggleTodoComplete,
   updateNameTodo,
   replaceTodos,
+  replaceNextId,
+  updateStatusSuccess,
 } = TodoListSlice.actions;
 export default TodoListSlice.reducer;

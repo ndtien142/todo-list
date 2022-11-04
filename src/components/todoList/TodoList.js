@@ -4,36 +4,81 @@ import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import Todo from "../todo/Todo";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewTodo, replaceTodos } from "./TodoListSlice";
-import { RemainingTodo, TodoListSelector } from "../../redux/selectors";
-import { getTodosApiUseQuery } from "../../api/todosApi";
-import { useQuery } from "@tanstack/react-query";
+import {
+  addNewTodo,
+  replaceNextId,
+  replaceTodos,
+  updateStatusSuccess,
+} from "./TodoListSlice";
+import {
+  nextIdSelector,
+  RemainingTodo,
+  StatusTodosSelector,
+} from "../../redux/selectors";
+import {
+  addNewTodosApiUseQuery,
+  getNextIdApiUseQuery,
+  getTodosApiUseQuery,
+  updateNextIdApiUseQuery,
+} from "../../api/todosApiWithUseQuery";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import TodosLoading from "../ui/loading/TodosLoading";
 
 function TodoList() {
-  const { data, isSuccess } = useQuery(["todos"], getTodosApiUseQuery);
-  // Fetching without useQuery
-  const dispatch = useDispatch();
-  if (data && isSuccess) {
-    console.log(data);
-  }
-  useEffect(() => {
-    if (data && isSuccess) {
-      console.log(data);
-      dispatch(replaceTodos(data));
-    }
-  }, [data]);
+  const statusTodos = useSelector(StatusTodosSelector);
   const [input, setInput] = useState("");
   const remainingTodo = useSelector(RemainingTodo);
-  const allTodos = useSelector(TodoListSelector);
+  const reduxNextId = useSelector(nextIdSelector);
+  const {
+    data: todos,
+    isSuccess: todosIsSuccess,
+    isLoading,
+  } = useQuery(["todos"], getTodosApiUseQuery);
+  const { data: nextId, isSuccess: nextIdSuccess } = useQuery(
+    ["nextId"],
+    getNextIdApiUseQuery
+  );
+  const { isLoading: updateTodosIsLoading, mutate: mutateTodos } = useMutation(
+    addNewTodosApiUseQuery
+  );
+  const { mutate: mutateNextId } = useMutation(updateNextIdApiUseQuery);
+  // Fetching with useQuery
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // Dispatch data to Redux
+    if (todos && todosIsSuccess && statusTodos === "idle") {
+      dispatch(replaceTodos(todos));
+      dispatch(updateStatusSuccess());
+    }
+  }, [todos, todosIsSuccess, dispatch, statusTodos]);
+
+  useEffect(() => {
+    if (nextIdSuccess && nextId) {
+      dispatch(replaceNextId(nextId));
+    }
+  }, [nextId, dispatch, nextIdSuccess]);
+
+  // Handle
   const handleInputTodoChange = (event) => {
     setInput(event.target.value);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (input.trim() === "") return;
-    dispatch(addNewTodo({ name: input, completed: false, id: 6 }));
+    if (input.trim() === "" && reduxNextId) return;
+    mutateTodos({
+      name: input,
+      completed: false,
+      id: reduxNextId ? reduxNextId : 0,
+    });
+    mutateNextId(reduxNextId + 1);
+    dispatch(
+      addNewTodo({
+        name: input,
+        completed: false,
+        id: reduxNextId ? reduxNextId : 0,
+      })
+    );
     setInput("");
-    // setLatestId((id) => id + 1);
   };
   return (
     <Box minWidth={400}>
@@ -47,17 +92,18 @@ function TodoList() {
           height: "200px",
         }}
       >
-        {remainingTodo.map((todo) => {
-          return (
-            <Todo
-              name={todo.name}
-              completed={todo.completed}
-              id={todo.id}
-              key={todo.id}
-              allTodos={allTodos}
-            ></Todo>
-          );
-        })}
+        {!isLoading &&
+          remainingTodo.map((todo) => {
+            return (
+              <Todo
+                name={todo.name}
+                completed={todo.completed}
+                id={todo.id}
+                key={todo.id}
+              ></Todo>
+            );
+          })}
+        {isLoading && <TodosLoading />}
       </List>
       <Box>
         <Box
@@ -83,6 +129,7 @@ function TodoList() {
             startIcon={<SendIcon />}
             type="submit"
             onClick={handleSubmit}
+            disabled={updateTodosIsLoading}
           >
             Add
           </Button>

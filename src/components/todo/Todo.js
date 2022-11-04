@@ -15,12 +15,15 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import React, { Fragment, useState } from "react";
 import { Box } from "@mui/system";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   deleteTodo,
   toggleTodoComplete,
   updateNameTodo,
 } from "../todoList/TodoListSlice";
+import { useMutation } from "@tanstack/react-query";
+import { updateTodosApiUseQuery } from "../../api/todosApiWithUseQuery";
+import { TodoListSelector } from "../../redux/selectors";
 
 const style = {
   position: "absolute",
@@ -34,29 +37,40 @@ const style = {
   p: 4,
 };
 
-function Todo({ id, name, completed, allTodos }) {
+function Todo({ id, name, completed }) {
   const [checked, setChecked] = useState(completed);
   const [modalUpdate, setModalUpdate] = useState(false);
   const [updateTodo, setUpdateTodo] = useState(name);
+  const { mutate: updateTodos } = useMutation(updateTodosApiUseQuery);
+  const allTodos = useSelector(TodoListSelector);
 
   const dispatch = useDispatch();
   const handleToggle = () => {
+    const transArr = JSON.parse(JSON.stringify(allTodos));
+    transArr.forEach((tdo) => {
+      if (tdo.id !== id) return;
+      tdo.completed = !tdo.completed;
+    });
+    updateTodos(transArr);
     dispatch(toggleTodoComplete(id));
     setChecked((check) => !check);
   };
   //   handler delete one todo
   const handleDeleteTodo = () => {
+    const transArr = JSON.parse(JSON.stringify(allTodos));
+    const newTrans = transArr.filter((tdo) => {
+      return tdo.id !== id;
+    });
+    updateTodos(newTrans);
     dispatch(deleteTodo(id));
   };
   const handleUpdateTodo = () => {
-    console.log("update");
     setModalUpdate(true);
   };
   const handleClose = () => {
     setModalUpdate(false);
   };
   const handleUpdateTodoChange = (event) => {
-    console.log(event.target.value);
     setUpdateTodo(event.target.value);
   };
   const handleUpdate = (event) => {
@@ -65,7 +79,12 @@ function Todo({ id, name, completed, allTodos }) {
       setUpdateTodo(name);
       return;
     }
-    console.log("handle update");
+    const transArr = JSON.parse(JSON.stringify(allTodos));
+    transArr.forEach((tdo) => {
+      if (tdo.id !== id) return;
+      tdo.name = updateTodo;
+    });
+    updateTodos(transArr);
     dispatch(updateNameTodo({ id, name: updateTodo }));
     setModalUpdate(false);
   };
@@ -92,7 +111,6 @@ function Todo({ id, name, completed, allTodos }) {
           aria-label="update"
           onClick={handleUpdateTodo}
           sx={{ mr: 1 }}
-          modal={modalUpdate}
         >
           <ModeEditOutlinedIcon />
         </IconButton>
