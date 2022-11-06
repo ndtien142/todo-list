@@ -33,10 +33,12 @@ function TodoList() {
     data: todos,
     isSuccess: todosIsSuccess,
     isLoading,
-  } = useQuery(["todos"], getTodosApiUseQuery);
+    isFetching,
+  } = useQuery(["todos"], getTodosApiUseQuery, { staleTime: 30000 });
   const { data: nextId, isSuccess: nextIdSuccess } = useQuery(
     ["nextId"],
-    getNextIdApiUseQuery
+    getNextIdApiUseQuery,
+    { cacheTime: 50000, staleTime: 30000 }
   );
   const { isLoading: updateTodosIsLoading, mutate: mutateTodos } = useMutation(
     addNewTodosApiUseQuery
@@ -51,7 +53,6 @@ function TodoList() {
       dispatch(updateStatusSuccess());
     }
   }, [todos, todosIsSuccess, dispatch, statusTodos]);
-
   useEffect(() => {
     if (nextIdSuccess && nextId) {
       dispatch(replaceNextId(nextId));

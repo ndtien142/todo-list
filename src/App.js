@@ -1,34 +1,21 @@
-import { Box, Typography } from "@mui/material";
-import Filters from "./components/filters/Filters";
-import TodoList from "./components/todoList/TodoList";
-import { styled } from "@mui/system";
 import { Fragment } from "react";
-import Navbar from "./components/ui/navbar/Navbar";
-
-const MyContainer = styled("div")({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  paddingLeft: "24px",
-  paddingRight: "24px",
-  height: "100vh",
-  backgroundColor: "#eee",
-});
+import Login from "./pages/login/Login";
+import SignUp from "./pages/signup/SignUp";
+import { Routes, Route } from "react-router-dom";
+import Todos from "./pages/home/Home";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import About from "./pages/about/About";
 
 function App() {
   return (
     <Fragment>
-      <Navbar />
-      <MyContainer>
-        <Box borderRadius={2} px={2} py={1} bgcolor="#FFF">
-          <Typography variant="h3" textAlign="center" mb={2}>
-            Todo List
-          </Typography>
-          <Filters />
-          <TodoList />
-        </Box>
-      </MyContainer>
+      <Routes>
+        <Route element={<Login />} path="/" />
+        <Route element={<SignUp />} path="signup" />
+        <Route element={<Todos />} path="home" />
+        <Route element={<About />} path="about" />
+      </Routes>
+      <ReactQueryDevtools />
     </Fragment>
   );
 }

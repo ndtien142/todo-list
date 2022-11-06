@@ -13,11 +13,16 @@ import { Box } from "@mui/system";
 import React, { useState } from "react";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import DrawerComp from "./DrawerComp";
+import { Link as RouteLink } from "react-router-dom";
 
-const DUMMY_LINKS = ["Todo List", "About", "Services"];
+const DUMMY_LINKS = [
+  ["Todo List", "home"],
+  ["About", "about"],
+  ["Services", "service"],
+];
 
-function Navbar() {
-  const [value, setValue] = useState(0);
+function Navbar({ valuePage }) {
+  const [value, setValue] = useState(valuePage);
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("sm"));
   const handleChangeTab = (event, newValue) => {
@@ -41,7 +46,13 @@ function Navbar() {
                 onChange={handleChangeTab}
               >
                 {DUMMY_LINKS.map((link, index) => (
-                  <Tab label={link} key={index}></Tab>
+                  <Tab
+                    label={link[0]}
+                    key={index}
+                    component={RouteLink}
+                    to={`/${link[1]}`}
+                    disabled={index === 2 ? true : false}
+                  ></Tab>
                 ))}
               </Tabs>
             </Grid>
