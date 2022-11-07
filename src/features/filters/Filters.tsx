@@ -9,17 +9,30 @@ import {
     RadioGroup,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useAppDispatch } from "../../redux/hooks";
+import { searchFilterChange, statusFilterChange } from "./FiltersSlice";
+import _debounce from 'lodash/debounce';
 
 function Filters() {
-    const [searchFilter, setSearchFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("All");
+    const inputRef = useRef<HTMLInputElement>(null);
+    const dispatch = useAppDispatch()
+    console.log(statusFilter)
+    // Clear filter when component unmounted
+    useEffect(() => {
+        return () => {
+            dispatch(searchFilterChange(""))
+        }
+    }, [dispatch])
 
-    const handleSearchFilterChange = (event: any) => {
-        setSearchFilter(event.target.value);
-    };
+    const handleSearchFilterChange = _debounce((value: any) => {
+        // setSearchFilter(inputRef.current ? inputRef.current.value : "")
+        dispatch(searchFilterChange(inputRef.current ? inputRef.current.value : ""))
+    }, 500);
     const handleStatusFilterChange = (event: any) => {
         setStatusFilter(event.target.value);
+        dispatch(statusFilterChange(event.target.value))
     };
     return (
         <Box minWidth={350} bgcolor="#fff">
@@ -31,7 +44,7 @@ function Filters() {
                     onChange={handleSearchFilterChange}
                     fullWidth
                     startAdornment={<SearchOutlinedIcon sx={{ mr: 2 }} />}
-                    value={searchFilter}
+                    inputRef={inputRef}
                 />
             </Box>
             <Divider />

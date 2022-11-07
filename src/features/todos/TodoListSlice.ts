@@ -1,24 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TodoSliceState, TodoState } from "../../types/TypesOfTodo";
 
-export interface TodosState {
-    id: string | number;
-    name: string;
-    completed: boolean;
-}
-
-export interface TodoListState{
-    status: "idle" | "succeed" | "loading" | "error";
-    todos: TodosState[];
-    isChange: boolean;
-    nextId: number | 0
-}
-
-const initialState: TodoListState = {
+const initialState: TodoSliceState = {
   status: "idle",
-  todos: [],
+  todos: [{ id: 1, name: "Learn React", completed: true }],
   isChange: false,
   nextId: 0,
 };
+
+
 
 const TodoListSlice = createSlice({
   name: "todoList",
@@ -30,13 +20,13 @@ const TodoListSlice = createSlice({
     replaceNextId: (state, action: PayloadAction<number>) => {
       state.nextId = action.payload;
     },
-    replaceTodos: (state, action: PayloadAction<TodosState[]>) => {
+    replaceTodos: (state, action: PayloadAction<TodoState[]>) => {
       const transArray = { ...action.payload };
       for (let key in transArray) {
         state.todos.push(transArray[key]);
       }
     },
-    addNewTodo: (state, action: PayloadAction<TodosState>) => {
+    addNewTodo: (state, action: PayloadAction<TodoState>) => {
       state.isChange = true;
       state.todos.push(action.payload);
       state.nextId = state.nextId + 1;
@@ -58,7 +48,7 @@ const TodoListSlice = createSlice({
         }
       });
     },
-    updateNameTodo: (state, action: PayloadAction<TodosState>) => {
+    updateNameTodo: (state, action: PayloadAction<TodoState>) => {
       state.isChange = true;
       state.todos.forEach((tdo) => {
         if (tdo.id === action.payload.id) {

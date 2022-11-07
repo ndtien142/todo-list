@@ -3,19 +3,15 @@ import SendIcon from "@mui/icons-material/Send";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import Todo from "./Todo";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { addNewTodo } from "./TodoListSlice";
+import { RemainningTodo } from "../../services/RemainingTodo";
 
-interface Todo {
-    id: string | number;
-    name: string;
-    completed: boolean;
-}
-
-
-const DUMMY_TODO: Todo[] = [{ id: 1, name: "Learn React", completed: true }]
 
 function TodoList() {
     const [input, setInput] = useState("");
-
+    const TodoList = useAppSelector(RemainningTodo)
+    const dispatch = useAppDispatch();
     // Handle
     const handleInputTodoChange = (event: any) => {
         setInput(event.target.value);
@@ -23,6 +19,7 @@ function TodoList() {
     const handleSubmit = (event: any) => {
         event.preventDefault();
         if (input.trim() === "") return;
+        dispatch(addNewTodo({ id: 2, name: input, completed: false }))
         setInput("");
     };
     return (
@@ -37,7 +34,7 @@ function TodoList() {
                     height: "200px",
                 }}
             >
-                {DUMMY_TODO.map((todo) => {
+                {TodoList.map((todo) => {
                     return (
                         <Todo
                             name={todo.name}

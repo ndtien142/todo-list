@@ -15,6 +15,8 @@ import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import React, { Fragment, useState } from "react";
 import { Box } from "@mui/system";
+import { useAppDispatch } from "../../redux/hooks";
+import { deleteTodo, toggleTodoComplete, updateNameTodo } from "./TodoListSlice";
 
 
 const style = {
@@ -33,13 +35,14 @@ const Todo: React.FC<{ id: string | number, name: string, completed: boolean }> 
     const [checked, setChecked] = useState(props.completed);
     const [modalUpdate, setModalUpdate] = useState(false);
     const [updateTodo, setUpdateTodo] = useState(props.name);
-
+    const dispatch = useAppDispatch()
     const handleToggle = () => {
+        dispatch(toggleTodoComplete(props.id))
         setChecked((check) => !check);
     };
     //   handler delete one todo
     const handleDeleteTodo = () => {
-        console.log("delete")
+        dispatch(deleteTodo(props.id))
     };
     const handleUpdateTodo = () => {
         setModalUpdate(true);
@@ -56,6 +59,7 @@ const Todo: React.FC<{ id: string | number, name: string, completed: boolean }> 
             setUpdateTodo(event.target.value);
             return;
         }
+        dispatch(updateNameTodo({ name: updateTodo, id: props.id, completed: props.completed }))
         setModalUpdate(false);
     };
     return (
