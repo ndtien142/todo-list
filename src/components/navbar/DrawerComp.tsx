@@ -11,14 +11,14 @@ import {
 import React, { useState } from "react";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
-const DrawerComp = ({ links }) => {
+const DrawerComp: React.FC<{ links: string[][] }> = (props) => {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Drawer open={open} onClose={() => setOpen(false)} anchor="left">
         <Box>
           <List>
-            {links.map((link, index) => {
+            {props.links.map((link, index) => {
               return (
                 <ListItemButton key={index}>
                   <ListItem>

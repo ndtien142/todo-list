@@ -15,17 +15,18 @@ import FactCheckIcon from "@mui/icons-material/FactCheck";
 import DrawerComp from "./DrawerComp";
 import { Link as RouteLink } from "react-router-dom";
 
-const DUMMY_LINKS = [
+
+const DUMMY_LINKS: string[][] = [
   ["Todo List", "home"],
   ["About", "about"],
   ["Services", "service"],
 ];
 
-function Navbar({ valuePage }) {
-  const [value, setValue] = useState(valuePage);
+const Navbar: React.FC<{ valuePage: number }> = (props) => {
+  const [value, setValue] = useState(props.valuePage);
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down("sm"));
-  const handleChangeTab = (event, newValue) => {
+  const handleChangeTab = (event: any, newValue: number) => {
     setValue(newValue);
   };
   return (
@@ -79,7 +80,7 @@ function Navbar({ valuePage }) {
             <Typography component="span">
               <FactCheckIcon />
             </Typography>
-            <DrawerComp links={DUMMY_LINKS} sx={{ marginLeft: "auto" }} />
+            <DrawerComp links={DUMMY_LINKS} />
           </Box>
         )}
       </Toolbar>

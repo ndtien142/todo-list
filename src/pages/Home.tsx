@@ -1,9 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
-import Filters from "../../components/filters/Filters";
-import TodoList from "../../components/todoList/TodoList";
+import TodoList from "../features/todos/TodoListWTS";
 import { styled } from "@mui/system";
-import Layout from "../layout/Layout";
+import Layout from "../layouts/Layout";
+import Filters from "../features/filters/Filters";
 
 const MyContainer = styled("div")({
   display: "flex",

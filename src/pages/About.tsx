@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-import Layout from "../layout/Layout";
+import Layout from "../layouts/Layout";
 
 const About = () => {
   return (
