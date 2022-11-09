@@ -13,7 +13,7 @@ export const getTodosApiUseQuery = async (): Promise<TodoState[] | string> => {
 };
 export const addNewTodosApiUseQuery = async (
   data: TodoState
-): Promise<TodoState[] | string> => {
+): Promise<TodoState> => {
   const response = await fetch(baseUrl, {
     method: 'POST',
     headers: {
@@ -21,10 +21,11 @@ export const addNewTodosApiUseQuery = async (
     },
     body: JSON.stringify(data),
   });
+  console.log(data);
   if (!response.ok) {
     throw new Error('Add failed!');
   }
-  return response.json();
+  return data;
 };
 export const updateTodosApiUseQuery = async (
   data: TodoState[]
@@ -43,7 +44,7 @@ export const updateTodosApiUseQuery = async (
 };
 
 // Next Id
-export const getNextIdApiUseQuery = async () => {
+export const getNextIdApiUseQuery = async (): Promise<number | null> => {
   const response = await fetch(idUrl);
   if (!response.ok) {
     throw new Error('Network response was not ok');

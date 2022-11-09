@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import TodoList from "../features/todos/TodoListWTS";
 import { styled } from "@mui/system";
 import Layout from "../layouts/Layout";
 import Filters from "../features/filters/Filters";
+import Todos from "../features/todos";
 
 const MyContainer = styled("div")({
   display: "flex",
@@ -15,7 +15,7 @@ const MyContainer = styled("div")({
   backgroundColor: "#eee",
 });
 
-const Todos = () => {
+const Home = () => {
   return (
     <Layout valuePage={0}>
       <MyContainer>
@@ -24,11 +24,11 @@ const Todos = () => {
             Todo List
           </Typography>
           <Filters />
-          <TodoList />
+          <Todos />
         </Box>
       </MyContainer>
     </Layout>
   );
 };
 
-export default Todos;
+export default Home;

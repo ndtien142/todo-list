@@ -18,7 +18,6 @@ function Filters() {
     const [statusFilter, setStatusFilter] = useState('All');
     const inputRef = useRef<HTMLInputElement>(null);
     const dispatch = useAppDispatch();
-    console.log(statusFilter);
     // Clear filter when component unmounted
     useEffect(() => {
         return () => {
