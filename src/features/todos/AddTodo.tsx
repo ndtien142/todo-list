@@ -8,12 +8,9 @@ import React, { useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { addNewTodo } from './TodoListSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useMutation } from '@tanstack/react-query';
-import {
-    updateNextIdApiUseQuery,
-} from '../../api/todosApiTS';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useAddTodoData } from '../../hooks/useAddTodoData';
+import { useUpdateNextId } from '../../hooks/useUpdateNextId';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -28,7 +25,7 @@ const AddTodo = () => {
     const nextId = useAppSelector((state) => state.todoList.nextId);
     const dispatch = useAppDispatch();
     const { mutate: addNewTodosServer } = useAddTodoData()
-    const { mutate: updateNextIdServer } = useMutation(updateNextIdApiUseQuery);
+    const { mutate: updateNextIdServer } = useUpdateNextId();
     const handleInputTodoChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {

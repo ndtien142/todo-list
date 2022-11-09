@@ -1,14 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addNewTodosApiUseQuery } from '../api/todosApiTS';
+import { updateTodosApiUseQuery } from '../api/todosApiTS';
 import { queryKey } from '../react-query/constants';
 
-export const useAddTodoData = () => {
+export const useUpdateTodoData = () => {
   const queryClient = useQueryClient();
-  return useMutation(addNewTodosApiUseQuery, {
+  return useMutation(updateTodosApiUseQuery, {
     onSuccess: (data) => {
       queryClient.invalidateQueries([queryKey.todos]);
-      queryClient.invalidateQueries([queryKey.nextId]);
-      console.log('Add succeed');
+      console.log('Update todo succeed');
     },
   });
 };

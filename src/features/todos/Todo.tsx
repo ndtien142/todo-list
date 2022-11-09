@@ -21,9 +21,8 @@ import {
     toggleTodoComplete,
     updateNameTodo,
 } from './TodoListSlice';
-import { useMutation } from '@tanstack/react-query';
-import { updateTodosApiUseQuery } from '../../api/todosApiTS';
 import { parChangeNameTodo, parCompetedTodo, parDeleteTodo } from '../../utils/ParsingTodos';
+import { useUpdateTodoData } from '../../hooks/useUpdateTodoData';
 
 const style = {
     position: 'absolute',
@@ -48,7 +47,7 @@ const Todo: React.FC<{
     // Get all todos on app
     const allTodos = useAppSelector(state => state.todoList.todos)
     // Update completed todo on server
-    const { mutate: updateTodoOnServer } = useMutation(updateTodosApiUseQuery)
+    const { mutate: updateTodoOnServer } = useUpdateTodoData()
     const dispatch = useAppDispatch();
     const handleToggle = () => {
         updateTodoOnServer(parCompetedTodo(props.id, allTodos));

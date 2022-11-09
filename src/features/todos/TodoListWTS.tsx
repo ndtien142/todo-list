@@ -10,13 +10,14 @@ import {
     getTodosApiUseQuery,
 } from '../../api/todosApiTS';
 import { useQuery } from '@tanstack/react-query';
+import { queryKey } from '../../react-query/constants';
 
 function TodoList() {
     const todoList = useAppSelector(RemainingTodo);
     const dispatch = useAppDispatch();
     // Get todos from server
     const { data: todosFromServer, isLoading } = useQuery(
-        ['todos'],
+        [queryKey.todos],
         getTodosApiUseQuery,
         {
             refetchOnWindowFocus: false,
@@ -25,7 +26,7 @@ function TodoList() {
     );
     // Get next id from server
     const { data: nextIdFromServer } = useQuery(
-        ['nextId'],
+        [queryKey.nextId],
         getNextIdApiUseQuery,
         {
             refetchOnWindowFocus: false,

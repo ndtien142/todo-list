@@ -13,7 +13,7 @@ export const getTodosApiUseQuery = async (): Promise<TodoState[] | string> => {
 };
 export const addNewTodosApiUseQuery = async (
   data: TodoState
-): Promise<TodoState> => {
+): Promise<unknown> => {
   const response = await fetch(baseUrl, {
     method: 'POST',
     headers: {
@@ -25,7 +25,16 @@ export const addNewTodosApiUseQuery = async (
   if (!response.ok) {
     throw new Error('Add failed!');
   }
-  return data;
+  // interface Key {
+  //   name: string;
+  // }
+  // interface Response {
+  //   [index: string]: TodoState;
+  // }
+  // const responseKey: Key = await response.json();
+  // const result = {} as Response;
+  // result[responseKey.name] = data;
+  return response.json();
 };
 export const updateTodosApiUseQuery = async (
   data: TodoState[]
