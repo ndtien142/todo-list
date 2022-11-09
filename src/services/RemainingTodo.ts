@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../redux/store";
 
-export const RemainningTodo = createSelector(
+export const RemainingTodo = createSelector(
     (state: RootState) => state.filters.search, 
     (state: RootState) => state.todoList.todos,
     (state: RootState) => state.filters.status,

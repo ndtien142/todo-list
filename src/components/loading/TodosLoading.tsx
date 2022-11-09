@@ -1,5 +1,5 @@
-import { Box, Grid, Skeleton } from "@mui/material";
-import React from "react";
+import { Box, Grid, Skeleton } from '@mui/material';
+import React from 'react';
 
 const SKELETON: number[] = [1, 2, 3];
 

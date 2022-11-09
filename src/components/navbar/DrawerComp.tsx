@@ -7,15 +7,15 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-} from "@mui/material";
-import React, { useState } from "react";
-import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+} from '@mui/material';
+import React, { useState } from 'react';
+import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 
 const DrawerComp: React.FC<{ links: string[][] }> = (props) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Drawer open={open} onClose={() => setOpen(false)} anchor="left">
+      <Drawer open={open} onClose={() => setOpen(false)} anchor='left'>
         <Box>
           <List>
             {props.links.map((link, index) => {
@@ -32,18 +32,18 @@ const DrawerComp: React.FC<{ links: string[][] }> = (props) => {
           <List>
             <ListItemButton>
               <ListItem>
-                <ListItemText primary="Login" />
+                <ListItemText primary='Login' />
               </ListItem>
             </ListItemButton>
             <ListItemButton>
               <ListItem>
-                <ListItemText primary="Signup" />
+                <ListItemText primary='Signup' />
               </ListItem>
             </ListItemButton>
           </List>
         </Box>
       </Drawer>
-      <IconButton onClick={() => setOpen(true)} color="inherit">
+      <IconButton onClick={() => setOpen(true)} color='inherit'>
         <MenuRoundedIcon />
       </IconButton>
     </>

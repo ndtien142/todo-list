@@ -1,30 +1,32 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TodoSliceState, TodoState } from "../../types/TypesOfTodo";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TodoSliceState, TodoState } from '../../types/TypesOfTodo';
 
 const initialState: TodoSliceState = {
-  status: "idle",
-  todos: [{ id: 1, name: "Learn React", completed: true }],
+  status: 'idle',
+  todos: [],
   isChange: false,
   nextId: 0,
 };
 
-
-
 const TodoListSlice = createSlice({
-  name: "todoList",
+  name: 'todoList',
   initialState,
   reducers: {
-    updateStatusSuccess: (state, action: PayloadAction<"succeed" | "error" | "idle" | "loading">) => {
-      state.status = "succeed";
+    updateStatusSuccess: (
+      state,
+      action: PayloadAction<'succeed' | 'error' | 'idle' | 'loading'>
+    ) => {
+      state.status = 'succeed';
     },
     replaceNextId: (state, action: PayloadAction<number>) => {
       state.nextId = action.payload;
     },
     replaceTodos: (state, action: PayloadAction<TodoState[]>) => {
-      const transArray = { ...action.payload };
-      for (let key in transArray) {
-        state.todos.push(transArray[key]);
+      const transArr: TodoState[] = [];
+      for (let key in action.payload) {
+        transArr.push(action.payload[key]);
       }
+      state.todos = transArr;
     },
     addNewTodo: (state, action: PayloadAction<TodoState>) => {
       state.isChange = true;
